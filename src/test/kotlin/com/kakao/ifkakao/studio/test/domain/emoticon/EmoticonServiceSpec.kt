@@ -1,8 +1,10 @@
 package com.kakao.ifkakao.studio.test.domain.emoticon
 
 import com.kakao.ifkakao.studio.domain.emoticon.EmoticonInformation
+import com.kakao.ifkakao.studio.domain.emoticon.EmoticonRepository
 import com.kakao.ifkakao.studio.domain.emoticon.EmoticonService
 import com.kakao.ifkakao.studio.test.Mock
+import com.kakao.ifkakao.studio.test.SpringDataConfig
 import io.kotest.core.spec.style.ExpectSpec
 import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.longs.shouldBeGreaterThan
@@ -13,9 +15,13 @@ import io.kotest.property.arbitrary.int
 import io.kotest.property.arbitrary.single
 import io.kotest.property.arbitrary.string
 import io.kotest.property.arbitrary.stringPattern
+import org.springframework.test.context.ContextConfiguration
 
-class EmoticonServiceSpec : ExpectSpec() {
-    private val emoticonService = EmoticonService()
+@ContextConfiguration(classes = [SpringDataConfig::class])
+class EmoticonServiceSpec(
+    emoticonRepository: EmoticonRepository
+) : ExpectSpec() {
+    private val emoticonService = EmoticonService(repository = emoticonRepository)
 
     init {
         context("create - 계정과 이모티콘 정보, 이미지로 이모티콘 생성을 요청하면") {

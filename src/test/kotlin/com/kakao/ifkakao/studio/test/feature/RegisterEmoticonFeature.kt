@@ -1,7 +1,7 @@
 package com.kakao.ifkakao.studio.test.feature
 
-import com.kakao.ifkakao.studio.domain.account.Account
 import com.kakao.ifkakao.studio.domain.account.AccountService
+import com.kakao.ifkakao.studio.domain.emoticon.EmoticonRepository
 import com.kakao.ifkakao.studio.domain.emoticon.EmoticonService
 import com.kakao.ifkakao.studio.handler.EmoticonHandler
 import com.kakao.ifkakao.studio.handler.request.RegisterEmoticon
@@ -12,7 +12,6 @@ import io.kotest.matchers.shouldBe
 import io.kotest.property.Arb
 import io.kotest.property.arbitrary.chunked
 import io.kotest.property.arbitrary.int
-import io.kotest.property.arbitrary.long
 import io.kotest.property.arbitrary.single
 import io.kotest.property.arbitrary.string
 import io.kotest.property.arbitrary.stringPattern
@@ -21,7 +20,8 @@ import io.mockk.mockk
 
 class RegisterEmoticonFeature : BehaviorSpec() {
     private val accountService = mockk<AccountService>() // MSA
-    private val emoticonService = EmoticonService()
+    private val emoticonRepository = mockk<EmoticonRepository>()
+    private val emoticonService = EmoticonService(repository = emoticonRepository)
     private val emoticonHandler = EmoticonHandler(
         accountService = accountService,
         emoticonService = emoticonService
