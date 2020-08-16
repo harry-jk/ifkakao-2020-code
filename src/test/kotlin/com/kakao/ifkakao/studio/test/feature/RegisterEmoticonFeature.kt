@@ -5,6 +5,7 @@ import com.kakao.ifkakao.studio.domain.account.AccountService
 import com.kakao.ifkakao.studio.domain.emoticon.EmoticonService
 import com.kakao.ifkakao.studio.handler.EmoticonHandler
 import com.kakao.ifkakao.studio.handler.request.RegisterEmoticon
+import com.kakao.ifkakao.studio.test.Mock
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.shouldBe
@@ -29,14 +30,15 @@ class RegisterEmoticonFeature : BehaviorSpec() {
     init {
         Given("본인 인증된 사용자가 로그인된 상황에서") {
             val token = Arb.stringPattern("([a-zA-Z0-9]{20})").single()
-            val account = account(identified = true)
+            val account = Mock.account(identified = true)
             every { accountService.take(token) } returns account
 
             When("검수 정보를 입력하고 검수 등록 버튼을 누르면”") {
                 val request = request()
-                val response = emoticonHandler.register(token, request)
 
                 Then("검수 등록 완료화면으로 이동 되어야한다") {
+                    val response = emoticonHandler.register(token, request)
+
                     response.authorId shouldBe account.id
                     response.title shouldBe request.title
                     response.description shouldBe request.description
@@ -46,13 +48,6 @@ class RegisterEmoticonFeature : BehaviorSpec() {
             }
         }
     }
-
-    private fun account(identified: Boolean) = Account(
-        id = Arb.long(min = 1).single(),
-        name = Arb.string(5..20).single(),
-        email = Arb.stringPattern("([a-zA-Z0-9]{5,20})\\@test\\.kakao\\.com").single(),
-        identified = identified
-    )
 
     private fun request() = RegisterEmoticon(
         title = Arb.string(10..100).single(),

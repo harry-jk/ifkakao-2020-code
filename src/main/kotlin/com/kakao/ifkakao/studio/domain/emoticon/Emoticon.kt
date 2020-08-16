@@ -12,3 +12,9 @@ data class Emoticon(
     val choco: Int,
     val images: List<String>
 )
+
+data class EmoticonInformation(
+    val title: String,
+    val description: String,
+    val choco: Int
+)
