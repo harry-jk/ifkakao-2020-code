@@ -1,8 +1,19 @@
 package com.kakao.ifkakao.studio.test.feature
 
+import com.kakao.ifkakao.studio.domain.account.Account
+import com.kakao.ifkakao.studio.domain.account.AccountService
+import com.kakao.ifkakao.studio.domain.emoticon.EmoticonService
+import com.kakao.ifkakao.studio.handler.EmoticonHandler
+import com.kakao.ifkakao.studio.handler.request.RegisterEmoticon
 import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.collections.shouldContainAll
+import io.kotest.matchers.shouldBe
 import io.kotest.property.Arb
+import io.kotest.property.arbitrary.chunked
+import io.kotest.property.arbitrary.int
+import io.kotest.property.arbitrary.long
 import io.kotest.property.arbitrary.single
+import io.kotest.property.arbitrary.string
 import io.kotest.property.arbitrary.stringPattern
 import io.mockk.every
 import io.mockk.mockk
@@ -35,4 +46,20 @@ class RegisterEmoticonFeature : BehaviorSpec() {
             }
         }
     }
+
+    private fun account(identified: Boolean) = Account(
+        id = Arb.long(min = 1).single(),
+        name = Arb.string(5..20).single(),
+        email = Arb.stringPattern("([a-zA-Z0-9]{5,20})\\@test\\.kakao\\.com").single(),
+        identified = identified
+    )
+
+    private fun request() = RegisterEmoticon(
+        title = Arb.string(10..100).single(),
+        description = Arb.string(100..300).single(),
+        choco = Arb.int(100..500).single(),
+        images = Arb.stringPattern("([a-zA-Z0-9]{1,10})/([a-zA-Z0-9]{1,10})\\.jpg")
+            .chunked(1..10)
+            .single()
+    )
 }
