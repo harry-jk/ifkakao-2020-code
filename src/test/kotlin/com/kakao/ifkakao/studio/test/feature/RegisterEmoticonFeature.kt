@@ -6,6 +6,7 @@ import com.kakao.ifkakao.studio.domain.emoticon.EmoticonService
 import com.kakao.ifkakao.studio.handler.EmoticonHandler
 import com.kakao.ifkakao.studio.handler.request.RegisterEmoticon
 import com.kakao.ifkakao.studio.test.Mock
+import com.kakao.ifkakao.studio.test.SpringDataConfig
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.shouldBe
@@ -17,10 +18,13 @@ import io.kotest.property.arbitrary.string
 import io.kotest.property.arbitrary.stringPattern
 import io.mockk.every
 import io.mockk.mockk
+import org.springframework.test.context.ContextConfiguration
 
-class RegisterEmoticonFeature : BehaviorSpec() {
+@ContextConfiguration(classes = [SpringDataConfig::class])
+class RegisterEmoticonFeature(
+    emoticonRepository:EmoticonRepository
+) : BehaviorSpec() {
     private val accountService = mockk<AccountService>() // MSA
-    private val emoticonRepository = mockk<EmoticonRepository>()
     private val emoticonService = EmoticonService(repository = emoticonRepository)
     private val emoticonHandler = EmoticonHandler(
         accountService = accountService,
@@ -51,7 +55,7 @@ class RegisterEmoticonFeature : BehaviorSpec() {
 
     private fun request() = RegisterEmoticon(
         title = Arb.string(10..100).single(),
-        description = Arb.string(100..300).single(),
+        description = Arb.string(250..300).single(),
         choco = Arb.int(100..500).single(),
         images = Arb.stringPattern("([a-zA-Z0-9]{1,10})/([a-zA-Z0-9]{1,10})\\.jpg")
             .chunked(1..10)
