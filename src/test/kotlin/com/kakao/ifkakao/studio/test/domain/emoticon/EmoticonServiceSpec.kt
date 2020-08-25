@@ -24,7 +24,7 @@ class EmoticonServiceSpec(
     private val emoticonService = EmoticonService(repository = emoticonRepository)
 
     init {
-        context("create - 계정과 이모티콘 정보, 이미지로 이모티콘 생성을 요청하면") {
+        context("create - 계정과 이모티콘 정보, 이미지로 이모티콘 생성을 하면") {
             val account = Mock.account(identified = true)
             val information = information()
             val images = images()

@@ -1,4 +1,4 @@
-package com.kakao.ifkakao.studio.test.feature
+package com.kakao.ifkakao.studio.test.bdd.feature
 
 import com.kakao.ifkakao.studio.domain.account.AccountService
 import com.kakao.ifkakao.studio.domain.emoticon.EmoticonRepository
@@ -7,7 +7,7 @@ import com.kakao.ifkakao.studio.handler.EmoticonHandler
 import com.kakao.ifkakao.studio.handler.request.RegisterEmoticon
 import com.kakao.ifkakao.studio.test.Mock
 import com.kakao.ifkakao.studio.test.SpringDataConfig
-import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.core.spec.style.FeatureSpec
 import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.shouldBe
 import io.kotest.property.Arb
@@ -21,9 +21,9 @@ import io.mockk.mockk
 import org.springframework.test.context.ContextConfiguration
 
 @ContextConfiguration(classes = [SpringDataConfig::class])
-class RegisterEmoticonFeature(
-    emoticonRepository:EmoticonRepository
-) : BehaviorSpec() {
+class EmoticonFeature(
+    emoticonRepository: EmoticonRepository
+) : FeatureSpec() {
     private val accountService = mockk<AccountService>() // MSA
     private val emoticonService = EmoticonService(repository = emoticonRepository)
     private val emoticonHandler = EmoticonHandler(
@@ -32,23 +32,26 @@ class RegisterEmoticonFeature(
     )
 
     init {
-        Given("본인 인증된 사용자가 로그인된 상황에서") {
-            val token = Arb.stringPattern("([a-zA-Z0-9]{20})").single()
-            val account = Mock.account(identified = true)
-            every { accountService.take(token) } returns account
+        feature("이모티콘 검수 등록") {
+            scenario(
+                """
+                본인 인증된 사용자가 로그인된 상황에서
+                검수 정보를 입력하고 검수 등록 버튼을 누르면 
+                등록 결과가 포함된 검수 진행 목록 화면으로 이동한다
+            """
+            ) {
+                val token = Arb.stringPattern("([a-zA-Z0-9]{20})").single()
+                val account = Mock.account(identified = true)
+                every { accountService.take(token) } returns account
 
-            When("검수 정보를 입력하고 검수 등록 버튼을 누르면”") {
                 val request = request()
+                val response = emoticonHandler.register(token, request)
 
-                Then("검수 등록 완료화면으로 이동 되어야한다") {
-                    val response = emoticonHandler.register(token, request)
-
-                    response.authorId shouldBe account.id
-                    response.title shouldBe request.title
-                    response.description shouldBe request.description
-                    response.choco shouldBe request.choco
-                    response.images shouldContainAll request.images
-                }
+                response.authorId shouldBe account.id
+                response.title shouldBe request.title
+                response.description shouldBe request.description
+                response.choco shouldBe request.choco
+                response.images shouldContainAll request.images
             }
         }
     }

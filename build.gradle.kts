@@ -1,9 +1,13 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED
+import org.gradle.api.tasks.testing.logging.TestLogEvent.PASSED
+import org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED
 
 group = "com.kakao.ifkakao"
 version = "1.0.0-SNAPSHOT"
 
 plugins {
+    id("java")
     kotlin("jvm") version "1.3.72"
     id("org.springframework.boot") version "2.2.2.RELEASE"
     id("io.spring.dependency-management") version "1.0.8.RELEASE"
@@ -22,6 +26,9 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+    testLogging {
+        events = setOf(FAILED, PASSED, SKIPPED)
+    }
 }
 
 val jacksonVersion = "2.11.2"
