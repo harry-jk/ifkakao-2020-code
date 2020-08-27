@@ -24,4 +24,5 @@ data class EmoticonEntity(
 )
 
 interface EmoticonRepository : CrudRepository<EmoticonEntity, Long> {
+    fun findAllByCreatedAtGreaterThanEqualAndCreatedAtLessThanEqual(from: Instant, to: Instant): List<EmoticonEntity>
 }

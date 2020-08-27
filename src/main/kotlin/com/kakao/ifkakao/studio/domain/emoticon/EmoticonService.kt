@@ -7,13 +7,15 @@ class EmoticonService(
     private val repository: EmoticonRepository
 ) {
     fun create(account: Account, information: EmoticonInformation, images: List<String>): Emoticon =
-        repository.save(EmoticonEntity(
-            accountId = account.id,
-            title = information.title,
-            description = information.description,
-            choco = information.choco,
-            images = images
-        )).dto()
+        repository.save(
+            EmoticonEntity(
+                accountId = account.id,
+                title = information.title,
+                description = information.description,
+                choco = information.choco,
+                images = images
+            )
+        ).dto()
 
     private fun EmoticonEntity.dto() = Emoticon(
         id = id,
@@ -24,7 +26,8 @@ class EmoticonService(
         images = images
     )
 
-    fun getAllCreatedAt(from: ZonedDateTime, to: ZonedDateTime): List<Emoticon> {
-        TODO("Not yet implemented")
-    }
+    fun getAllCreatedAt(from: ZonedDateTime, to: ZonedDateTime): List<Emoticon> = repository
+        .findAllByCreatedAtGreaterThanEqualAndCreatedAtLessThanEqual(from.toInstant(), to.toInstant())
+        .map { it.dto() }
+
 }
