@@ -25,7 +25,7 @@ class EmoticonFeature(
 ) : FeatureSpec() {
     private val accountService = mockk<AccountService>() // MSA
     private val emoticonService = EmoticonService(repository = emoticonRepository)
-    private val emailService = mockk<EmailService>()
+    private val emailService = mockk<EmailService>(relaxed = true)
     private val emoticonHandler = EmoticonHandler(
         accountService = accountService,
         emoticonService = emoticonService,
