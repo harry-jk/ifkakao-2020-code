@@ -39,7 +39,8 @@ class EmoticonFeature(
     private val emailService = mockk<EmailService>()
     private val emoticonHandler = EmoticonHandler(
         accountService = accountService,
-        emoticonService = emoticonService
+        emoticonService = emoticonService,
+        emailService = emailService
     )
 
     private val admins = listOf(

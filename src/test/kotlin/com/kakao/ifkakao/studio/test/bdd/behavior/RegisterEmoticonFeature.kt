@@ -37,7 +37,8 @@ class RegisterEmoticonFeature(
     private val emoticonService = EmoticonService(repository = emoticonRepository)
     private val emoticonHandler = EmoticonHandler(
         accountService = accountService,
-        emoticonService = emoticonService
+        emoticonService = emoticonService,
+        emailService = mockk()
     )
 
     override fun isolationMode(): IsolationMode = InstancePerLeaf

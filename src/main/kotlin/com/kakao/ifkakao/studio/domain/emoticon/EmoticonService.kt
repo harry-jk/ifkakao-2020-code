@@ -1,6 +1,7 @@
 package com.kakao.ifkakao.studio.domain.emoticon
 
 import com.kakao.ifkakao.studio.domain.account.Account
+import java.time.ZonedDateTime
 
 class EmoticonService(
     private val repository: EmoticonRepository
@@ -22,4 +23,8 @@ class EmoticonService(
         choco = choco,
         images = images
     )
+
+    fun getAllCreatedAt(from: ZonedDateTime, to: ZonedDateTime): List<Emoticon> {
+        TODO("Not yet implemented")
+    }
 }
