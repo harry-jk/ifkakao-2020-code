@@ -7,6 +7,7 @@ import com.kakao.ifkakao.studio.exception.AccountNotFoundException
 import com.kakao.ifkakao.studio.exception.DeniedRegisterEmoticonException
 import com.kakao.ifkakao.studio.handler.request.RegisterEmoticon
 import com.kakao.ifkakao.studio.handler.response.EmoticonRegistered
+import java.time.ZonedDateTime
 
 class EmoticonHandler(
     private val accountService: AccountService,
@@ -28,5 +29,9 @@ class EmoticonHandler(
             choco = emoticon.choco,
             images = emoticon.images
         )
+    }
+
+    fun report(of: ZonedDateTime) {
+        TODO("Not yet implemented")
     }
 }

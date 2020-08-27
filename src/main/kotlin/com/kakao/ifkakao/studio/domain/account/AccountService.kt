@@ -21,4 +21,8 @@ class AccountService(apiUrl: String) {
         }
         .block()
 
+    fun getAdminList(): List<Account> {
+        TODO("Not yet implemented")
+    }
+
 }
