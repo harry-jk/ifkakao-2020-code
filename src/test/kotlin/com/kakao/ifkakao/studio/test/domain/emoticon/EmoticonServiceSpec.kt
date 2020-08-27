@@ -24,11 +24,11 @@ class EmoticonServiceSpec(
     private val emoticonService = EmoticonService(repository = emoticonRepository)
 
     init {
-        context("create - 계정과 이모티콘 정보, 이미지로 이모티콘 생성을 하면") {
+        context("이모티콘 생성을 할 때") {
             val account = Mock.account(identified = true)
             val information = information()
             val images = images()
-            expect("이모티콘이 생성된다.") {
+            expect("계정과 이모티콘 정보, 이미지가 있으면 이모티콘이 생성된다.") {
                 val emoticon = emoticonService.create(account, information, images)
                 emoticon.id shouldBeGreaterThan 0
                 emoticon.authorId shouldBe account.id
