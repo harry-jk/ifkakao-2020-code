@@ -21,6 +21,7 @@ import io.kotest.property.arbitrary.int
 import io.kotest.property.arbitrary.single
 import io.kotest.property.arbitrary.string
 import io.kotest.property.arbitrary.stringPattern
+import io.mockk.checkEquals
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
@@ -61,8 +62,8 @@ class RegisterEmoticonFeature(
 
                         verify(exactly = 1) {
                             accountService.take(token = token)
-                            emoticonRepository.save(withArg<EmoticonEntity> {
-                                it.accountId shouldBe account.id
+                            emoticonRepository.save(match<EmoticonEntity> {
+                                it.accountId == account.id
                             })
                         }
                     }
